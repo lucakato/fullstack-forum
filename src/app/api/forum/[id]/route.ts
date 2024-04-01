@@ -36,3 +36,20 @@ export const PUT = async (req: Request, res: NextResponse) => {
         await prisma.$disconnect();
     }
 };
+
+// API to delete post details
+export const DELETE = async (req: Request, res: NextResponse) => {
+    try {
+        const id: number = parseInt(req.url.split("/forum/")[1]);
+
+        await main();
+        const post = await prisma.post.delete({
+            where: { id },
+        });
+        return NextResponse.json({message: 'Success', post}, {status: 200});
+    } catch (err) {
+        return NextResponse.json({message: 'Error', err}, {status: 500});
+    } finally {
+        await prisma.$disconnect();
+    }
+};
