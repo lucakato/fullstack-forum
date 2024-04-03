@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Toaster, toast } from "react-hot-toast";
 
 const sendPost = async (title: string | undefined, description: string | undefined) => {
-    const res = await fetch('http://localhost:3000/api/forum', {
+    const res = await fetch(`http://localhost:3000/api/forum`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -27,7 +27,7 @@ const MakePost = () => {
 
         await sendPost(titleRef.current?.value, descriptionRef.current?.value);
         toast.loading("Success!", {id: "1"});
-        
+
         router.push("/");
         router.refresh();
     };

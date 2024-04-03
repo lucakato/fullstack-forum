@@ -3,26 +3,27 @@
 import React, { useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from "react-hot-toast";
-import { title } from 'process';
 
-const editThought = async (
-        title: string | undefined,
-        description: string | undefined,
-        id: number
-    ) => {
-    const res = await fetch('http://localhost:3000/api/forum/${id}', {
+type updateParams = {
+    title: string;
+    description: string;
+    id: number;
+};
+
+const updatePost = async (data: updateParams) => {
+    const res = await fetch(`http://localhost:3000/api/forum/${data.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, description, id }),
+        body: JSON.stringify({ title: data.title, description: data.description }),
     });
 
     return res.json();
 };
 
 const getPostByID = async (id: number) => {
-    const res = await fetch('http://localhost:3000/api/forum/${id}');
+    const res = await fetch(`http://localhost:3000/api/forum/${id}`);
     const data = await res.json();
     return data.post;
 };
@@ -37,19 +38,31 @@ const EditPost = ({ params }: { params: { id: number } }) => {
         e.preventDefault();
         toast.loading("Loading...", {id: "1"});
 
-        await editThought(titleRef.current?.value, descriptionRef.current?.value, params.id);
-        toast.loading("Success!", {id: "1"});
-        
-        router.push("/");
-        router.refresh();
+        if (titleRef.current && descriptionRef.current){
+            toast.loading("updating!", { id: "1" });
+
+            await updatePost({
+                title: titleRef.current?.value, 
+                description: descriptionRef.current?.value,
+                id: params.id,
+            });
+    
+            toast.loading("Success!", {id: "1"});
+            
+            router.push("/");
+            router.refresh();
+        }
     };
 
     useEffect(() => {
+        toast.loading("Fetching Post Details 🚀", { id: "1" });
         getPostByID(params.id)
             .then((data) => {
                 if (titleRef.current && descriptionRef.current) {
                     titleRef.current.value = data.title;
                     descriptionRef.current.value = data.description;
+                    console.log(params.id)
+                    toast.success("Fetching Completed", { id: "1" });
                 }
             }).catch((err) => {
                 toast.error("Error!", { id: "1" });
