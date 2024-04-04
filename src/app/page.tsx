@@ -9,7 +9,6 @@ async function getAllPosts(){
   if (!data){
     throw new Error('Failed to fetch data')
   }
-
   return data.posts;
 }
 

@@ -22,12 +22,22 @@ const updatePost = async (data: updateParams) => {
     return res.json();
 };
 
+const delPost = async (id: number) => {
+    const res = await fetch(`http://localhost:3000/api/forum/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    return res.json();
+};
+
 const getPostByID = async (id: number) => {
     const res = await fetch(`http://localhost:3000/api/forum/${id}`);
     const data = await res.json();
     return data.post;
 };
-
 
 const EditPost = ({ params }: { params: { id: number } }) => {
     const router = useRouter();
@@ -52,6 +62,14 @@ const EditPost = ({ params }: { params: { id: number } }) => {
             router.push("/");
             router.refresh();
         }
+    };
+
+    const handleDelete = async () => {
+        toast.loading('loading...');
+        await delPost(params.id);
+
+        router.push("/");
+        router.refresh();
     };
 
     useEffect(() => {
@@ -90,7 +108,9 @@ const EditPost = ({ params }: { params: { id: number } }) => {
                 <button className="font-semibold px-4 py-2 shadow-xl bg-slate-200 rounded-lg m-auto hover:bg-slate-100">
                     Update
                 </button>
-                <button className="ml-2 font-semibold px-4 py-2 shadow-xl bg-red-400 rounded-lg m-auto hover:bg-slate-100">
+                <button
+                    onClick={handleDelete}
+                    className="ml-2 font-semibold px-4 py-2 shadow-xl bg-red-400 rounded-lg m-auto hover:bg-slate-100">
                     Delete
                 </button>
                 </form>
