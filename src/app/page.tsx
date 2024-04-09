@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PostType } from "./types";
 
-async function getAllPosts(){
+export async function getAllPosts(){
   const res = await fetch(`http://localhost:3000/api/forum`, { cache: 'no-store' })
   const data = await res.json()
   if (!data){
