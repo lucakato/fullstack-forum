@@ -1,5 +1,3 @@
-import Image from "next/image";
-import type { GetServerSideProps } from 'next'
 import Link from "next/link";
 import { PostType } from "./types";
 
