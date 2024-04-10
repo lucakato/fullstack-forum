@@ -85,7 +85,7 @@ const EditPost = ({ params }: { params: { id: number } }) => {
             }).catch((err) => {
                 toast.error("Error!", { id: "1" });
             });
-    }, []);
+    }, [params.id]);
 
     return (
         <>
